@@ -1,0 +1,11 @@
+version: '3'
+services:
+  working-station:
+    build: .
+    volumes:
+        - $LOCAL_HOME_USER:/home/$USER
+        - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+        - USER=$USER
+    ports:
+        - "23:22"
