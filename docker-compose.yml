@@ -6,6 +6,8 @@ services:
         - $LOCAL_HOME_USER:/home/$USER
         - /var/run/docker.sock:/var/run/docker.sock
     environment:
-        - USER=$USER
+        - REMOTE_USER=$REMOTE_USER
+        - PROJECT_NAME=$PROJECT_NAME
+        - GIT_REPO=$GIT_REPO
     ports:
-        - "23:22"
+        - $LOCAL_SSH_PORT:22

@@ -80,15 +80,18 @@ RUN apt-get install git -y
 
 #clean stuff
 RUN rm -rf /tmp/*
-RUN apt-get remove -y apport 
+RUN apt-get remove -y apport && apt autoremove -y
+
 
 #copy necessary to configure workingstation
 COPY ["*.conf", "/etc/supervisor/conf.d/"]
 COPY ["*.sh", "/"]
 
-RUN cp /env.sh /etc/profile.d/env.sh
+RUN cp /set_env.sh /etc/profile.d/set_env.sh
 RUN chmod +x /*.sh
 
 EXPOSE 22
-ENV USER=vpetcu
+ENV REMOTE_USER=desktop
+ENV PROJECT_NAME=Test
+ENV GIT_REPO=https://github.com/vpetcu1/quarkus-microservice.git
 ENTRYPOINT ["/docker-entrypoint.sh"]
