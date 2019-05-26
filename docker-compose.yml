@@ -8,6 +8,6 @@ services:
     environment:
         - REMOTE_USER=$REMOTE_USER
         - PROJECT_NAME=$PROJECT_NAME
-        - GIT_REPO=$GIT_REPO
+        - REMOTE_PASSWORD=$REMOTE_PASSWORD
     ports:
         - $LOCAL_SSH_PORT:22

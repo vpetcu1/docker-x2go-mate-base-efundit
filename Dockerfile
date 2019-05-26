@@ -26,10 +26,6 @@ RUN apt-get update -y -qq && \
     apt-get install -y x2goserver x2goserver-xsession && \
     apt-get install -y ubuntu-mate-desktop x2gomatebindings && \
 
-# clean up
-    apt-get autoclean && apt-get autoremove && \
-    rm -rf /var/lib/apt/lists/* && \
-
 # sshd stuff
     mkdir -p /var/run/sshd && \
     sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && \
@@ -44,11 +40,8 @@ RUN apt-get update -y -qq && \
     mkdir -p /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && \
     mkdir -p /var/run/dbus
 
-# install tightvncserver
-RUN apt-get update && apt-get install tightvncserver -y
-
 # install openJDK
-RUN apt-get install default-jdk -y
+RUN apt-get update && apt-get install default-jdk -y
 
 # install maven
 RUN wget https://www-us.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz -P /tmp
@@ -61,14 +54,6 @@ RUN wget https://github.com/oracle/graal/releases/download/vm-$GRAAL_VERSION/gra
 RUN tar xf /tmp/graalvm-ce-*.tar.gz -C /opt
 RUN ln -s /opt/graalvm-ce-1.0.0-rc16 /opt/graalvm
 
-#install docker
-RUN apt-get update
-RUN apt-get -y install apt-transport-https ca-certificates curl software-properties-common
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(. /etc/os-release; echo \"$UBUNTU_CODENAME\") stable"
-RUN apt-get update
-RUN apt-get -y install docker-ce docker-compose
-
 
 # install eclipse
 RUN wget http://ftp.halifax.rwth-aachen.de/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-jee-2019-03-R-linux-gtk-x86_64.tar.gz -P /tmp
@@ -78,20 +63,33 @@ RUN tar xf /tmp/eclipse-jee-*.tar.gz -C /opt
 RUN apt-get update
 RUN apt-get install git -y
 
-#clean stuff
+#install docker
+RUN apt-get update
+RUN apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(. /etc/os-release; echo \"$UBUNTU_CODENAME\") stable"
+#RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+RUN apt-get update
+RUN apt-get -y install docker-ce docker-compose
+
+#clean up
 RUN rm -rf /tmp/*
 RUN apt-get remove -y apport && apt autoremove -y
+RUN apt-get autoclean && apt-get autoremove
+RUN rm -rf /var/lib/apt/lists/*
 
+
+ENV REMOTE_USER=desktop
+ENV PROJECT_NAME=Test
+ENV REMOTE_PASSWORD=password
 
 #copy necessary to configure workingstation
 COPY ["*.conf", "/etc/supervisor/conf.d/"]
 COPY ["*.sh", "/"]
+COPY ["eclipse_preferences.epf", "/"]
 
 RUN cp /set_env.sh /etc/profile.d/set_env.sh
 RUN chmod +x /*.sh
 
 EXPOSE 22
-ENV REMOTE_USER=desktop
-ENV PROJECT_NAME=Test
-ENV GIT_REPO=https://github.com/vpetcu1/quarkus-microservice.git
 ENTRYPOINT ["/docker-entrypoint.sh"]
