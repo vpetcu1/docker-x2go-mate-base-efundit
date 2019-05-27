@@ -11,8 +11,8 @@ adduser $REMOTE_USER sudo
 echo "=> Setting a password to the $REMOTE_USER user"
 echo "$REMOTE_USER:$REMOTE_PASSWORD" | chpasswd
 
-echo "Add user $USER to docker group"
-usermod -aG docker $REMOTE_USER
+#echo "Add user $USER to docker group"
+#usermod -aG docker $REMOTE_USER
 
 echo "=> Done!"
 touch /.user_pw_set
