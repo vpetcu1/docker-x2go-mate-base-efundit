@@ -24,7 +24,7 @@ RUN apt-get update -y -qq && \
 
 # install x2go and Mate
     apt-get install -y x2goserver x2goserver-xsession && \
-    apt-get install -y ubuntu-mate-desktop x2gomatebindings && \
+    apt-get install -y ubuntu-mate-desktop --no-install-recommends && apt-get install -y x2gomatebindings && \
 
 # sshd stuff
     mkdir -p /var/run/sshd && \
@@ -71,6 +71,9 @@ RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubunt
 #RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
 RUN apt-get update
 RUN apt-get -y install docker-ce docker-compose
+
+#nistall Global Menu & plank & wallpapers
+RUN apt-get install -y mate-applet-brisk-menu mate-applet-appmenu plank ubuntu-mate-wallpapers
 
 #clean up
 RUN rm -rf /tmp/*
