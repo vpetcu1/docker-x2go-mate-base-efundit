@@ -20,13 +20,20 @@ RUN apt-get update -y -qq && \
     apt-get update -y -qq && \
 
 # install supervisor and openssh
-    apt-get install -y supervisor openssh-server pwgen vim && \
+    apt-get install -y supervisor openssh-server pwgen
 
 # install x2go and Mate
-    apt-get install -y x2goserver x2goserver-xsession && \
-    apt-get install -y ubuntu-mate-desktop --no-install-recommends && apt-get install -y x2gomatebindings && \
+RUN apt-get install -y x2goserver x2goserver-xsession x2gomatebindings
+#RUN apt-get install -y mate-desktop --no-install-recommends
 #install Global Menu & plank & wallpapers
-    apt-get install -y mate-applet-brisk-menu mate-applet-appmenu
+RUN apt-get install -y mate-applet-appmenu
+    
+RUN apt-get install -y mate-control-center
+RUN apt-get install -y mate-terminal
+#RUN apt-get install -y mate-tweak
+RUN apt-get install -y numix-blue-gtk-theme numix-icon-theme 
+#RUN apt-get install -y mate-panel
+RUN apt-get install -y unzip
 
 # sshd stuff
 RUN mkdir -p /var/run/sshd && \
@@ -58,6 +65,7 @@ ENV REMOTE_PASSWORD=password
 COPY ["*.conf", "/etc/supervisor/conf.d/"]
 COPY ["*.sh", "/"]
 COPY ["eclipse_preferences.epf", "/"]
+COPY ["home.zip", "/"]
 
 RUN cp /set_env.sh /etc/profile.d/set_env.sh
 RUN chmod +x /*.sh
