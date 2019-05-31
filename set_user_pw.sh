@@ -6,9 +6,9 @@ if [ -f /.user_pw_set ]; then
 fi
 
 echo Copy "setting to /etc/skel"
-unzip /home.zip -d /etc/skel
+unzip -qq /home.zip -d /etc/skel
 
-useradd $REMOTE_USER -m -p '*' -d /home/$REMOTE_USER
+useradd $REMOTE_USER -m -p '*' -d /home/$REMOTE_USER -s /bin/bash
 #useradd -m -d /PATH/TO/FOLDER USERNAME
 #adduser --disabled-password --gecos "" --quiet $REMOTE_USER
 adduser $REMOTE_USER sudo

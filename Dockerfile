@@ -34,6 +34,8 @@ RUN apt-get install -y mate-terminal
 RUN apt-get install -y numix-blue-gtk-theme numix-icon-theme 
 #RUN apt-get install -y mate-panel
 RUN apt-get install -y unzip
+RUN apt-get install -y plank
+
 
 # sshd stuff
 RUN mkdir -p /var/run/sshd && \
